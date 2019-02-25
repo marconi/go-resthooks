@@ -12,6 +12,12 @@
 
 - Implement, list, get and update subscription endpoints
 
+### Installation
+
+```Bash
+$ dep ensure -add github.com/marconi/go-resthooks
+```
+
 ### Usage
 
 ```Go
@@ -36,8 +42,8 @@ Its up to you where or how you would store the subscription, as long as you impl
 
 Also `rh.Handler()` returns an `http.Handler` so you can mount it on prefix and any route that supports that standard interface. You can even wrap it with say authentication middleware, all 3rd-party middlewares that support the standard intefface `http.Handle` should work. Here we are just using the built-in `http.Handle`. In this setup, we'll get the following routes:
 
-1. POST /hooks/subscribe
-2. DELETE /hooks/unsubscribe
+1. `POST /hooks/subscribe`
+2. `DELETE /hooks/unsubscribe`
 
 The first one is used to create a subscription and the second one to delete the subscription. Again how you handle this is up to your `ResthookStore` implementation, for example you can choose soft-delete when deleting subscription for auditing later.
 
