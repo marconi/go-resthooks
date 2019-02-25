@@ -14,11 +14,11 @@ const (
 	// 1st retry = after 5 seconds
 	// 2nd retry = 5*3 = after 15 seconds
 	// 3rd retry (final) = 5*3*3 = after 45 seconds
-	defaultInitialRetry    int = 5
-	defaultRetryMultiplier int = 3
+	DefaultInitialRetry    int = 5
+	DefaultRetryMultiplier int = 3
 
 	// maximum number of attempts
-	defaultMaxRetry int = 3
+	DefaultMaxRetry int = 3
 )
 
 type Config struct {
@@ -36,9 +36,9 @@ type Resthook struct {
 func NewResthook(store ResthookStore, config ...Config) Resthook {
 	rh := Resthook{
 		config: Config{
-			InitialRetry:    defaultInitialRetry,
-			RetryMultiplier: defaultRetryMultiplier,
-			MaxRetry:        defaultMaxRetry,
+			InitialRetry:    DefaultInitialRetry,
+			RetryMultiplier: DefaultRetryMultiplier,
+			MaxRetry:        DefaultMaxRetry,
 		},
 		store:  store,
 		result: make(chan *Notification),
