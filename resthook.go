@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -31,6 +32,7 @@ type Resthook struct {
 	config Config
 	store  ResthookStore
 	result chan *Notification
+	wg     *sync.WaitGroup
 }
 
 func NewResthook(store ResthookStore, config ...Config) Resthook {
@@ -42,13 +44,16 @@ func NewResthook(store ResthookStore, config ...Config) Resthook {
 		},
 		store:  store,
 		result: make(chan *Notification),
+		wg:     new(sync.WaitGroup),
 	}
 
 	if len(config) > 0 {
 		rh.config = config[0]
 	}
 
+	rh.wg.Add(1)
 	go func() {
+		defer rh.wg.Done()
 		for {
 			select {
 
@@ -74,6 +79,7 @@ func (rh Resthook) GetResults() <-chan *Notification {
 
 func (rh Resthook) Close() {
 	close(rh.result)
+	rh.wg.Wait()
 }
 
 func (rh Resthook) Handler() http.Handler {
@@ -138,12 +144,14 @@ func (rh Resthook) Notify(userId int, event string, data interface{}) error {
 	}
 
 	// otherwise we retry
+	rh.wg.Add(1)
 	go rh.retry(n)
 
 	return nil
 }
 
 func (rh *Resthook) retry(n *Notification) {
+	defer rh.wg.Done()
 	interval := rh.config.InitialRetry
 	for {
 		select {

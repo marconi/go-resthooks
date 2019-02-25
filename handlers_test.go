@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/marconi/resthooks"
+	resthooks "github.com/marconi/go-resthooks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

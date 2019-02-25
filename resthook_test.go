@@ -6,9 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	resthooks "github.com/marconi/go-resthooks"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/marconi/resthooks"
 )
 
 type SampleData struct {
